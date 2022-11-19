@@ -11,41 +11,41 @@ CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
-# checks API Works:
-# sales = SHEET.worksheet('sales')
-#
-# data = sales.get_all_values()
-#
-# print(data)
 
 
 def get_sales_data():
     """
-    Get sales figures input from user
+    Get sales figures input from the user.
     """
-    print("please enter sales data from market")
-    print("data should be entered as 6 numerical values")
-    print("with no spaces by commas.")
-    print("Example: 1,2,3,4,5,6\n")
+    while True:
+        print("Please enter sales data from the last market.")
+        print("Data should be six numbers, separated by commas.")
+        print("Example: 10,20,30,40,50,60\n")
 
-    data_str = input("Enter your data here: ")
-    # print(f"\nThe data provided is {data_str}")
-    sales_data = data_str.split(",")
-    # print(f"supplied data has now been converted to: {sales_data}")
-    validate_data(sales_data)
+        data_str = input("Enter your data here: ")
+        sales_data = data_str.split(",")
+        if validate_data(sales_data):
+            print("data is valid")
+            break
 
 
 def validate_data(values):
     """
-    docstring 
+    Inside the try, converts all string values into integers.
+    Raises ValueError if strings cannot be converted into int,
+    or if there aren't exactly 6 values.
     """
     try:
+        [int(value) for value in values]
         if len(values) != 6:
             raise ValueError(
-                f"6 values are required, you provided {len(values)}"
+                f"Exactly 6 values required, you provided {len(values)}"
             )
     except ValueError as e:
-        print(f"invalid data: {e}, please try again.\n")
+        print(f"Invalid data: {e}, please try again.\n")
+        return False
+    
+    return True
 
 
-get_sales_data()
+data = get_sales_data()
