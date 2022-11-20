@@ -67,6 +67,21 @@ def update_sales_worksheet(data):
     print("Sales worksheet updated successfully.\n")
 
 
+def update_surplus_worksheet(data):
+    """
+    Update surplus worksheet, add new row with the list data provided
+    """
+    print("Updating surplus worksheet...\n")
+    
+    surplus_worksheet = SHEET.worksheet("surplus")
+    surplus_worksheet.append_row(data)
+    print("Surplus worksheet updated successfully.\n")   
+    
+    surplus = surplus_worksheet.get_all_values()
+    surplus_row = surplus[-1]
+    print(f"newly added surplus data: {surplus_row}")
+
+
 def calculate_surplus_data(sales_row):
     """
     Compare sales with stock and calculate the surplus for each item type.
@@ -84,7 +99,9 @@ def calculate_surplus_data(sales_row):
     for stock, sales in zip(stock_row, sales_row):
         surplus = int(stock) - sales
         surplus_data.append(surplus)
-    print(f"surplus: {surplus_data}")
+    print(f"surplus: {surplus_data}\n")
+    print("now parsing to spreadsheet...\n")
+    update_surplus_worksheet(surplus_data)
 
 
 def main():
