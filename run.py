@@ -1,4 +1,3 @@
-from pprint import pprint
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -57,29 +56,16 @@ def validate_data(values):
     return True
 
 
-def update_sales_worksheet(data):
-    """
-    Update sales worksheet, add new row with the list data provided
-    """
-    print("Updating sales worksheet...\n")
-    sales_worksheet = SHEET.worksheet("sales")
-    sales_worksheet.append_row(data)
-    print("Sales worksheet updated successfully.\n")
+def update_worksheet(data, worksheet):
+    """"""
+    print(f"Updating {worksheet} worksheet...\n")
+    worksheet_to_update = SHEET.worksheet(worksheet)
+    worksheet_to_update.append_row(data)
+    print(f"{worksheet} worksheet updated successfully.\n")
 
-
-def update_surplus_worksheet(data):
-    """
-    Update surplus worksheet, add new row with the list data provided
-    """
-    print("Updating surplus worksheet...\n")
-    
-    surplus_worksheet = SHEET.worksheet("surplus")
-    surplus_worksheet.append_row(data)
-    print("Surplus worksheet updated successfully.\n")   
-    
-    surplus = surplus_worksheet.get_all_values()
-    surplus_row = surplus[-1]
-    print(f"newly added surplus data: {surplus_row}")
+    new_worksheet_data = worksheet_to_update.get_all_values()
+    new_worksheet_row = new_worksheet_data[-1]
+    print(f"newly appended figures in {worksheet}: {new_worksheet_row}")
 
 
 def calculate_surplus_data(sales_row):
@@ -101,7 +87,7 @@ def calculate_surplus_data(sales_row):
         surplus_data.append(surplus)
     print(f"surplus: {surplus_data}\n")
     print("now parsing to spreadsheet...\n")
-    update_surplus_worksheet(surplus_data)
+    update_worksheet(surplus_data, 'surplus')
 
 
 def main():
@@ -110,7 +96,7 @@ def main():
     """
     data = get_sales_data()
     sales_data = [int(num) for num in data]
-    update_sales_worksheet(sales_data)
+    update_worksheet(sales_data, 'sales')
     calculate_surplus_data(sales_data)
 
 
