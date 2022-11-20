@@ -37,6 +37,16 @@ def get_sales_data():
     return sales_data
 
 
+def get_last_5_entries_sales():
+    """gets last 5 entries of a column"""
+    sales = SHEET.worksheet("sales")
+    columns = []
+    for ind in range(1, 7):
+        column = sales.col_values(ind)
+        columns.append(column[-5:])
+    print(columns)
+
+
 def validate_data(values):
     """
     Inside the try, converts all string values into integers.
@@ -101,4 +111,4 @@ def main():
 
 
 print("Lets log some sandwiches boiii")
-main()
+sales_columns = get_last_5_entries_sales()
